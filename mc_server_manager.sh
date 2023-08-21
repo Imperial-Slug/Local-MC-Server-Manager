@@ -2,10 +2,32 @@
 # Bash Minecraft Server Manager
 # By Sam Petch
 
+# ======================================= DEFINITIONS ==================================================
+
+DATA_FILE=./conf/data
+now=$(date)
 set -euo pipefail
 
-   main_menu() {
-	echo -ne "
+# If the datafile exists already in the script's conf directory, then proceed with normal startup.
+check_for_config() {
+
+if [ -f "$DATA_FILE" ]; then
+    printf "$DATA_FILE exists.\n"
+    source $DATA_FILE
+    
+    
+else printf "The datafile doesn't exist.  Creating the datafile in ./conf... \n"
+    	mkdir -p ./conf
+    	touch ./conf/data
+    	printf "# Configuration file created on $now" > ./conf/data
+fi
+}
+
+   display_main_menu() {
+  
+  check_for_config
+  
+	printf "
 	
 	     ============================================
             |  BASH MINECRAFT SERVER MANAGER: MAIN MENU  |
@@ -29,8 +51,9 @@ set -euo pipefail
 	"
 	}
 	
+# ======================================= EXECUTION ==================================================
 	
-	main_menu
+	display_main_menu
 	
 # Wait for user input before exiting
 read -n 1 -s -r -p "Press any key to exit..."

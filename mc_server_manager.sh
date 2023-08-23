@@ -23,9 +23,18 @@ else printf "The datafile doesn't exist.  Creating the datafile in ./conf... \n"
 fi
 }
 
+ receive_menu_option() {
+	
+     read -n 1 -s -p "Type the desired option's corresponding number and press Enter." chosen_option
+     echo ""
+     echo -e "\n$chosen_option chosen.\n"
+
+	read -n 1 -p "Type the desired option's corresponding number and press Enter."
+
+	
+	}
+
    display_main_menu() {
-  
-  check_for_config
   
 	printf "
 	
@@ -48,13 +57,20 @@ fi
 	
 	6) Minecraft Server Administration
 	
-	"
+	\n\n"
+	
+	receive_menu_option
+	
 	}
 	
+    
+	
 # ======================================= EXECUTION ==================================================
-	
+
+	check_for_config
+	if [[ $? -eq 0 ]]
+	then printf "Configuration check complete.  Ready to go."
 	display_main_menu
-	
-# Wait for user input before exiting
-read -n 1 -s -r -p "Press any key to exit..."
-	
+	else printf "Error checking for configuration file!"
+	fi
+

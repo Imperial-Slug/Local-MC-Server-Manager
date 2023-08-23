@@ -5,7 +5,6 @@
 # ======================================= DEFINITIONS ==================================================
 
 DATA_FILE=./conf/data
-now=$(date)
 set -euo pipefail
 
 # If the datafile exists already in the script's conf directory, then proceed with normal startup.
@@ -19,6 +18,7 @@ if [ -f "$DATA_FILE" ]; then
 else printf "The datafile doesn't exist.  Creating the datafile in ./conf... \n"
     	mkdir -p ./conf
     	touch ./conf/data
+    	now=$(date)
     	printf "# Configuration file created on $now" > ./conf/data
 fi
 }

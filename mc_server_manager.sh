@@ -67,10 +67,10 @@ fi
 	
 # ======================================= EXECUTION ==================================================
 
-	check_for_config
+	check_for_config  
 	if [[ $? -eq 0 ]]
-	then printf "Configuration check complete.  Ready to go."
+	then printf " Configuration check complete.  Ready to go."
 	display_main_menu
-	else printf "Error checking for configuration file!"
+	else printf " Error checking for configuration file!\n "
 	fi
 

@@ -9,6 +9,13 @@ set -euo pipefail
 
 # If the datafile exists already in the script's conf directory, then proceed with normal startup.
 
+execute_menu_option() {
+ 
+ printf "HI"
+ read placeholder
+ 
+ }
+
 check_for_config() {
 
 if [ -f "$DATA_FILE" ]; then
@@ -34,14 +41,6 @@ fi
 
 	
 	}
-	
-# Handle the menu option selections once the user has chosen it.
-	
- execute_menu_option() {
- 
- 
- 
- }
 	
 	
 

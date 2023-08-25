@@ -8,6 +8,7 @@ DATA_FILE=./conf/data
 set -euo pipefail
 
 # If the datafile exists already in the script's conf directory, then proceed with normal startup.
+
 check_for_config() {
 
 if [ -f "$DATA_FILE" ]; then
@@ -29,10 +30,20 @@ fi
      echo ""
      echo -e "\n$chosen_option chosen.\n"
 
-	read -n 1 -p "Type the desired option's corresponding number and press Enter."
+	execute_menu_option
 
 	
 	}
+	
+# Handle the menu option selections once the user has chosen it.
+	
+ execute_menu_option() {
+ 
+ 
+ 
+ }
+	
+	
 
    display_main_menu() {
   
@@ -67,10 +78,14 @@ fi
 	
 # ======================================= EXECUTION ==================================================
 
-	check_for_config  
+	check_for_config 
+	
+	# If the last command passed exited with status of 0...
+	
 	if [[ $? -eq 0 ]]
 	then printf " Configuration check complete.  Ready to go."
 	display_main_menu
 	else printf " Error checking for configuration file!\n "
+	read -p -n 1 -s "Press any button to exit.\n "
 	fi
 

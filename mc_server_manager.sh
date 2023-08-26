@@ -53,11 +53,13 @@ if [ -f "$DATA_FILE" ]; then
     source $DATA_FILE
     
     
-else printf "The datafile doesn't exist.  Creating the datafile in ./conf... \n"
+else printf "The datafile didn't exist.  Created the datafile in ./conf. \n"
     	mkdir -p ./conf
     	touch ./conf/data
     	now=$(date)
-    	printf "# Configuration file created on $now" > ./conf/data
+    	printf "# Configuration file created on $now\n  no_servers_stored=1" > ./conf/data
+	printf "Created conf directory with data file."
+	source $DATA_FILE
 fi
 }
 
@@ -65,7 +67,7 @@ fi
 	
      read -n 1 -s -p "Type the desired option's corresponding number." chosen_option
      echo ""
-     echo -e "\n$chosen_option chosen.\n"
+     echo -e -n "\n$chosen_option chosen.\n"
 
 	execute_menu_option
 
@@ -112,7 +114,16 @@ fi
 	# If the last command passed exited with status of 0...
 	
 	if [[ $? -eq 0 ]]
-	then printf " Configuration check complete.  Ready to go."
+	then printf '%b\n' " Configuration check complete.  Ready to go."
+	
+	if [[ $no_servers_stored -eq 1 ]]
+	then read -n 1 -s -p " ==========================================================================
+	
+It looks like you don't have any Minecraft servers configured.  To add a server to Bash MC Server Manager, exit this dialogue with any key; \n then you can either press 2 to install a new Minecraft server and add it to this program, or press 5 to add an existing Minecraft server.
+
+ ========================================================================== "
+	fi
+	
 	display_main_menu
 	else printf " Error checking for configuration file!\n "
 	read -p -n 1 -s "Press any button to exit.\n "

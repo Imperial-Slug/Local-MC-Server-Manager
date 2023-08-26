@@ -11,8 +11,38 @@ set -euo pipefail
 
 execute_menu_option() {
  
- printf "HI"
- read placeholder
+ case $chosen_option in
+
+  1)
+    printf "1"
+    ;;
+
+  2)
+    echo -n "2"
+    ;;
+
+  3)
+    echo -n "3"
+    ;;
+
+  4)
+    echo -n "4"
+    ;;
+
+  5)
+    echo -n "5"
+    ;;
+  
+  6)
+    echo -n "6"
+    ;;
+  
+  *)
+    echo -n "unknown"
+    ;;
+esac
+
+read -p "Okay, option chosen\n."
  
  }
 
@@ -33,7 +63,7 @@ fi
 
  receive_menu_option() {
 	
-     read -n 1 -s -p "Type the desired option's corresponding number and press Enter." chosen_option
+     read -n 1 -s -p "Type the desired option's corresponding number." chosen_option
      echo ""
      echo -e "\n$chosen_option chosen.\n"
 

@@ -78,12 +78,7 @@ done
 }
 
 
-option_5() {
- 
-clear 
-MENU_LENGTH=39
-help_to_centre
-
+option_5_menu() {
 print_space_to_centre
 printf "=======================================
 "
@@ -105,6 +100,15 @@ Minecraft server you would like to add:
 "
    
    create_line_to_size
+}
+
+
+option_5() {
+ 
+clear 
+MENU_LENGTH=39
+help_to_centre
+option_5_menu
 
  read -p "
  New Server File Path:  "

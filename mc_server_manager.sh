@@ -30,9 +30,8 @@ main_menu="
 	\n\n"
 
 
-no_servers_message=" 
-It looks like you don't have any Minecraft servers configured.  To add a server to Bash MC Server Manager, exit this dialogue with any key; \n then you can either press 2 to install a new Minecraft server and add it to this program, or press 5 to add an existing Minecraft server.
- "
+
+
 
 create_line_to_size() {
 
@@ -41,7 +40,9 @@ while [[ $c -le $COLUMNS ]]; do
     printf "="
     ((c=c+1)) 
 done
-
+printf "
+"
+c=1
 }
 
 help_to_centre() {
@@ -74,11 +75,12 @@ while [[ $i -le $space_length ]]; do
     printf " "
     ((i=i+1)) 
 done
-
+i=0
 }
 
 
 option_5_menu() {
+help_to_centre 
 print_space_to_centre
 printf "=======================================
 "
@@ -96,22 +98,21 @@ printf "=======================================
 
 printf "
 Please specify the filepath of the local 
-Minecraft server you would like to add: 
+Minecraft server you would like to add. 
+Example: ~/mc_servers/my_server_directory
 "
    
    create_line_to_size
+   read -p "New Server File Path:  "
 }
 
-
+# Option_5 execution
 option_5() {
- 
-clear 
+
 MENU_LENGTH=39
+clear
 help_to_centre
 option_5_menu
-
- read -p "
- New Server File Path:  "
 
 }
 
@@ -119,7 +120,7 @@ option_5_menu
 
 execute_menu_option() {
  
- case $chosen_option in
+ case ${chosen_option} in
 
   1)
     printf "1"
@@ -154,6 +155,31 @@ read -p "Okay, option chosen\n."
  
  }
 
+
+check_for_stored_servers() {
+
+# If the last command exited with status of 0...
+	
+	if [[ $? -eq 0 ]]
+	then printf '%b\n' " Configuration check complete.  Ready to go."
+	
+	if [[ $no_servers_stored -eq 1 ]]
+	then printf "It looks like you don't have any Minecraft servers configured." 
+	#create_line_to_size
+	
+	read -n 1 -s -p "To add a server to Bash MC Server Manager, exit this dialogue with any key; \n then you can either press 2 to install a new Minecraft server and add it to this program, or press 5 to add an existing Minecraft server.
+ "
+	fi
+	
+	display_main_menu
+	
+	else printf " Error checking for configuration file!\n "
+	read -p -n 1 -s "Press any button to exit.\n "
+	fi
+	
+}
+
+
 check_for_config() {
 
 if [ -f "$DATA_FILE" ]; then
@@ -187,22 +213,9 @@ fi
 	
     
 	
-# ======================================= EXECUTION ==================================================
+# ======================================= MAIN CALL STACK ==================================================
 	
 	check_for_config 
+	check_for_stored_servers
 	
-	# If the last command passed exited with status of 0...
-	
-	if [[ $? -eq 0 ]]
-	then printf '%b\n' " Configuration check complete.  Ready to go."
-	
-	if [[ $no_servers_stored -eq 1 ]]
-	then read -n 1 -s -p "$no_servers_message"
-	fi
-	
-	display_main_menu
-	
-	else printf " Error checking for configuration file!\n "
-	read -p -n 1 -s "Press any button to exit.\n "
-	fi
 

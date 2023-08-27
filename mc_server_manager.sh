@@ -35,8 +35,10 @@ main_menu="
 
 create_line_to_size() {
 
+columns=$(tput cols)
+
 c=1              
-while [[ $c -le $COLUMNS ]]; do
+while [[ $c -le $columns ]]; do
     printf "="
     ((c=c+1)) 
 done
@@ -57,11 +59,11 @@ space_length=$(( (COLUMNS - MENU_LENGTH) / 2 ))
 
 create_data_file() {
 
-printf "The datafile didn't exist.  Created the datafile in ./conf. \n"
+printf "The datafile didn't exist.\n"
     	mkdir -p ./conf
     	touch ./conf/data
     	now=$(date)
-    	printf "# Configuration file created on $now\n  no_servers_stored=1" > ./conf/data
+    	printf "# Configuration file created on $now\n  no_servers_stored=1\nserver_array=()" > ./conf/data
 	printf "Created conf directory with data file."
 	source $DATA_FILE
 
@@ -86,24 +88,27 @@ printf "=======================================
 "
 
 print_space_to_centre
-
 printf "| ADD EXISTING LOCAL MINECRAFT SERVER |
 "
 
 print_space_to_centre
-
 printf "=======================================
 "
 
-
-printf "
-Please specify the filepath of the local 
-Minecraft server you would like to add. 
-Example: ~/mc_servers/my_server_directory
-"
-   
+printf "Please specify the filepath of the local\n Minecraft server you would like to add.\nExample: ~/mc_servers/my_server_directory\n"
+printf "\n"
    create_line_to_size
-   read -p "New Server File Path:  "
+   printf "New Server File Path:  "
+   # Saves the cursor's position, moves the cursor down by 1 line, and restores the cursor's position
+   # so that the user input can stay in between the lines but the second line can generate before the
+   # termination of the "read" prompt.
+  tput sc 
+  tput cud1 
+  create_line_to_size
+  tput rc 
+  read -e -p "" server_path
+  printf "\n\n"
+   
 }
 
 # Option_5 execution
@@ -151,7 +156,7 @@ execute_menu_option() {
     ;;
 esac
 
-read -p "Okay, option chosen\n."
+read -s -n 1 -p "Okay, option chosen."
  
  }
 
@@ -159,22 +164,28 @@ read -p "Okay, option chosen\n."
 check_for_stored_servers() {
 
 # If the last command exited with status of 0...
-	
 	if [[ $? -eq 0 ]]
-	then printf '%b\n' " Configuration check complete.  Ready to go."
-	
+	then printf '%b\n' "\nConfiguration check complete.  Ready to go.\n"
+	create_line_to_size
 	if [[ $no_servers_stored -eq 1 ]]
-	then printf "It looks like you don't have any Minecraft servers configured." 
-	#create_line_to_size
+	then printf "It looks like you don't have any Minecraft servers configured.\n" 
+	create_line_to_size
 	
-	read -n 1 -s -p "To add a server to Bash MC Server Manager, exit this dialogue with any key; \n then you can either press 2 to install a new Minecraft server and add it to this program, or press 5 to add an existing Minecraft server.
- "
+	read -n 1 -s -r -p "
+To add a server to Bash MC Server Manager, exit this dialogue with any key.  
+Then, you can either press 2 to install a new Minecraft server 
+and add it to this program or press 5 to add an existing Minecraft server.
+
+"
+create_line_to_size
+
 	fi
 	
 	display_main_menu
 	
 	else printf " Error checking for configuration file!\n "
-	read -p -n 1 -s "Press any button to exit.\n "
+	read -p -n 1 -s "Press any button to exit.
+	"
 	fi
 	
 }

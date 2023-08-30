@@ -63,7 +63,7 @@ printf "The datafile didn't exist.\n"
     	mkdir -p ./conf
     	touch ./conf/data
     	now=$(date)
-    	printf "# Configuration file created on $now\n  no_servers_stored=1\nserver_array=()" > ./conf/data
+    	printf "# Configuration file created on $now\n  no_servers_stored=1\n server_array=()" > ./conf/data
 	printf "Created conf directory with data file."
 	source $DATA_FILE
 
@@ -107,6 +107,15 @@ printf "\n"
   create_line_to_size
   tput rc 
   read -e -p "" server_path
+ 
+ server_array+=("$server_path")
+ printf "\n server_array+=(\"${server_path}\")" >> ./conf/data
+  source $DATA_FILE
+  
+  echo ${server_array[@]}
+  printf "\n\n\n\n"
+  
+  read -p "Okay"
   printf "\n\n"
    
 }
@@ -194,7 +203,6 @@ create_line_to_size
 check_for_config() {
 
 if [ -f "$DATA_FILE" ]; then
-    printf "$DATA_FILE exists.\n"
     source $DATA_FILE
     
 else create_data_file

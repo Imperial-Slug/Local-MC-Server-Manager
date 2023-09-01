@@ -1,0 +1,11 @@
+/home/sam/Documents/Projects/Bash Projects/MC_Server_Manager/Local-MC-Server-Manager/jar_grabber/target/debug/deps/bitflags-dabfe8d9535e7843.rmeta: /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/lib.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/iter.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/parser.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/traits.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/public.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/internal.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/external.rs
+
+/home/sam/Documents/Projects/Bash Projects/MC_Server_Manager/Local-MC-Server-Manager/jar_grabber/target/debug/deps/bitflags-dabfe8d9535e7843.d: /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/lib.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/iter.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/parser.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/traits.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/public.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/internal.rs /home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/external.rs
+
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/lib.rs:
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/iter.rs:
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/parser.rs:
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/traits.rs:
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/public.rs:
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/internal.rs:
+/home/sam/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.4.0/src/external.rs:

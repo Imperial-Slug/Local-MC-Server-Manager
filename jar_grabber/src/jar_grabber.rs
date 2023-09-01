@@ -2,9 +2,17 @@
 use tokio::fs::File as TokioFile;
 use tokio::io::AsyncWriteExt;
 use reqwest::Url;
+use std::io;
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    println!("Downloading server.jar...");
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read input!");
+    println!("You entered: {}", input);
+
     // URL of the Minecraft server JAR
     let jar_url = Url::parse("https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar")?;
 

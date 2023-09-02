@@ -1,0 +1,9 @@
+# Configuration file created on Fri 01 Sep 2023 08:36:52 PM EDT
+  no_servers_stored=1
+ server_array=()
+ server_array+=("~/meowYow")
+ server_array+=("~/meowmoe")
+ server_array+=("~/hoohoo")
+ server_array+=("~/nonono")
+ server_array+=("~/googoo")
+ server_array+=("~/memwoemw")

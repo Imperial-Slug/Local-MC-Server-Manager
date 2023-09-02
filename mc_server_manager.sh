@@ -116,7 +116,10 @@ printf "\n"
   printf "\n\n\n\n"
   
   read -p "Okay"
-  printf "\n\n"
+  printf "Downloading server.jar via Rust http request.  Please wait..."
+  
+  ./jar_grabber/target/release/jar_grabber
+  
    
 }
 

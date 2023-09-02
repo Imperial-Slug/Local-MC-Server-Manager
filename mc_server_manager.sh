@@ -51,19 +51,19 @@ help_to_centre() {
 # Get the difference in length between the menu item and the current 
 # terminal window, and divide it by 2 so the function can print 
 # the appropriate amount of spaces to centre the item.
-
-space_length=$(( (COLUMNS - MENU_LENGTH) / 2 ))
+# Define MENU_LENGTH at runtime during use of the function.
+columns=$(tput cols)
+space_length=$(( (columns - MENU_LENGTH) / 2 ))
 
 
 }
 
 create_data_file() {
 
-printf "The datafile didn't exist.\n"
     	mkdir -p ./conf
     	touch ./conf/data
     	now=$(date)
-    	printf "# Configuration file created on $now\n  no_servers_stored=1\n server_array=()" > ./conf/data
+    	printf "# Configuration file created on $now\n  no_servers_stored=1\n server_array=()" > $DATA_FILE
 	printf "Created conf directory with data file."
 	source $DATA_FILE
 
@@ -81,7 +81,7 @@ i=0
 }
 
 
-option_5_menu() {
+op5_add_new_server_path() {
 help_to_centre 
 print_space_to_centre
 printf "=======================================
@@ -109,7 +109,7 @@ printf "\n"
   read -e -p "" server_path
  
  server_array+=("$server_path")
- printf "\n server_array+=(\"${server_path}\")" >> ./conf/data
+ printf "\n server_array+=(\"${server_path}\")" >> $DATA_FILE
   source $DATA_FILE
   printf "\n
   Here are your currently stored servers:
@@ -119,15 +119,37 @@ printf "\n"
   echo ${server_array[@]}
   printf "\n\n"
   
-  read -p "OKAY SERVER ADDED"
+  read -p "OKAY, SERVER ADDED"
   source $DATA_FILE
   if [[ $no_servers_stored -eq 1 ]];  then 
-printf "\n no_servers_stored=0" >> ./conf/data
+printf "\n no_servers_stored=0" >> $DATA_FILE
+  source $DATA_FILE
   fi
  # ./jar_grabber/target/release/jar_grabber
   
    
 }
+
+set_nst_zero() {
+
+search="no_servers_stored=1"
+replace="no_servers_stored=0"
+
+# Check if the file exists
+if [ -e "$DATA_FILE" ]; then
+    if grep -qF "$search" "$DATA_FILE"; then
+        sed -i "s/$search/$replace/g" "$DATA_FILE"
+        printf "no_servers_stored set to 0."
+    else
+    printf "Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.  "
+    fi
+else
+    printf "Error: Couldn't find the data file.  This may be a bug.  "
+fi
+
+}
+
+
 
 # Option_5 execution
 option_5() {
@@ -135,7 +157,7 @@ option_5() {
 MENU_LENGTH=39
 clear
 help_to_centre
-option_5_menu
+op5_add_new_server_path
 
 }
 
@@ -184,8 +206,12 @@ check_for_stored_servers() {
 # If the last command exited with status of 0...
 	if [[ $? -eq 0 ]]
 	then printf '%b\n' "\nConfiguration check complete.  Ready to go.\n"
+	
 	create_line_to_size
 	if [[ $no_servers_stored -eq 1 ]]
+	
+	MENU_LENGTH=32
+	help_to_centre
 	then printf "It looks like you don't have any Minecraft servers configured.\n" 
 	create_line_to_size
 	

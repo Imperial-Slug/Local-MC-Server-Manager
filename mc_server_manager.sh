@@ -111,14 +111,20 @@ printf "\n"
  server_array+=("$server_path")
  printf "\n server_array+=(\"${server_path}\")" >> ./conf/data
   source $DATA_FILE
+  printf "\n
+  Here are your currently stored servers:
+  
+  "
   
   echo ${server_array[@]}
-  printf "\n\n\n\n"
+  printf "\n\n"
   
-  read -p "Okay"
-  printf "Downloading server.jar via Rust http request.  Please wait..."
-  
-  ./jar_grabber/target/release/jar_grabber
+  read -p "OKAY SERVER ADDED"
+  source $DATA_FILE
+  if [[ $no_servers_stored -eq 1 ]];  then 
+printf "\n no_servers_stored=0" >> ./conf/data
+  fi
+ # ./jar_grabber/target/release/jar_grabber
   
    
 }

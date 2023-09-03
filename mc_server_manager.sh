@@ -5,7 +5,7 @@
 # ======================================= DEFINITIONS ==================================================
 
 DATA_FILE=./conf/data
-set -euo pipefail
+#set -euo pipefail
 main_menu="
 	
 	     ============================================
@@ -80,6 +80,25 @@ done
 i=0
 }
 
+set_nst_zero() {
+
+search="no_servers_stored=1"
+replace="no_servers_stored=0"
+
+# Check if the file exists
+if [ -e "$DATA_FILE" ]; then
+    if grep -qF "$search" "$DATA_FILE"; then
+  
+        sed -i "s/$search/$replace/g" "$DATA_FILE"
+        printf "no_servers_stored set to 0.\n"
+    else
+    printf "Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.  "
+    fi
+else
+    printf "Error: Couldn't find the data file.  This may be a bug.  "
+fi
+source $DATA_FILE
+}
 
 op5_add_new_server_path() {
 help_to_centre 
@@ -106,7 +125,7 @@ printf "\n"
   tput cud1 
   create_line_to_size
   tput rc 
-  read -e -p "" server_path
+  read server_path
  
  server_array+=("$server_path")
  printf "\n server_array+=(\"${server_path}\")" >> $DATA_FILE
@@ -121,33 +140,19 @@ printf "\n"
   
   read -p "OKAY, SERVER ADDED"
   source $DATA_FILE
-  if [[ $no_servers_stored -eq 1 ]];  then 
-printf "\n no_servers_stored=0" >> $DATA_FILE
+  if [ $no_servers_stored == "1" ];  then 
+set_nst_zero
   source $DATA_FILE
-  fi
+
+display_main_menu
+
+fi
  # ./jar_grabber/target/release/jar_grabber
   
    
 }
 
-set_nst_zero() {
 
-search="no_servers_stored=1"
-replace="no_servers_stored=0"
-
-# Check if the file exists
-if [ -e "$DATA_FILE" ]; then
-    if grep -qF "$search" "$DATA_FILE"; then
-        sed -i "s/$search/$replace/g" "$DATA_FILE"
-        printf "no_servers_stored set to 0."
-    else
-    printf "Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.  "
-    fi
-else
-    printf "Error: Couldn't find the data file.  This may be a bug.  "
-fi
-
-}
 
 
 
@@ -202,17 +207,17 @@ read -s -n 1 -p "Okay, option chosen."
 
 
 check_for_stored_servers() {
-
+	source $DATA_FILE
 # If the last command exited with status of 0...
 	if [[ $? -eq 0 ]]
 	then printf '%b\n' "\nConfiguration check complete.  Ready to go.\n"
-	
-	create_line_to_size
-	if [[ $no_servers_stored -eq 1 ]]
-	
 	MENU_LENGTH=32
 	help_to_centre
-	then printf "It looks like you don't have any Minecraft servers configured.\n" 
+	create_line_to_size
+	if [[ $no_servers_stored -eq 1 ]]
+	then
+	
+	printf "It looks like you don't have any Minecraft servers configured.\n" 
 	create_line_to_size
 	
 	read -n 1 -s -r -p "
@@ -223,9 +228,10 @@ and add it to this program or press 5 to add an existing Minecraft server.
 "
 create_line_to_size
 
+else
+	display_main_menu
 	fi
 	
-	display_main_menu
 	
 	else printf " Error checking for configuration file!\n "
 	read -p -n 1 -s "Press any button to exit.

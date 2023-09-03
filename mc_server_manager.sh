@@ -99,7 +99,7 @@ else
 fi
 source $DATA_FILE
 }
-
+##########################################################
 op5_add_new_server_path() {
 help_to_centre 
 print_space_to_centre
@@ -126,8 +126,32 @@ printf "\n"
   create_line_to_size
   tput rc 
   read server_path
+ echo $server_path
+ #======================================
+ #=================================================
+ #================================
  
- server_array+=("$server_path")
+if [ -d "$(eval echo $server_path)" ]; then
+    # Check for required files and folders
+if [ -f "$(eval echo $server_path/server.jar)" ]; then
+        printf "\nThis appears to be a Minecraft server directory."
+    	add_server
+    else
+        printf "\nThis directory does not seem to be a Minecraft server directory."
+    fi
+else
+    printf "\nDirectory not found."
+fi
+
+ #===============================
+ 
+   
+}
+#######################################################################
+
+add_server() {
+
+server_array+=("$server_path")
  printf "\n server_array+=(\"${server_path}\")" >> $DATA_FILE
   source $DATA_FILE
   printf "\n
@@ -149,11 +173,9 @@ display_main_menu
 fi
  # ./jar_grabber/target/release/jar_grabber
   
-   
+
+
 }
-
-
-
 
 
 # Option_5 execution

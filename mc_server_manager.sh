@@ -5,6 +5,7 @@
 # ======================================= DEFINITIONS ==================================================
 
 DATA_FILE=./conf/data
+is_server=0
 #set -euo pipefail
 main_menu="
 	
@@ -99,7 +100,30 @@ else
 fi
 source $DATA_FILE
 }
-##########################################################
+
+
+#=========================
+
+check_if_server_stored() {
+
+# Check if the file exists
+if [ -e "$DATA_FILE" ]; then
+    if grep -qF "$server_path" "$DATA_FILE"; then
+        printf "Server already stored."
+        server_is_stored=1
+    else
+    printf "Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.  "
+    server_is_stored=0
+    fi
+else
+    printf "Error: Couldn't find the data file.  This may be a bug.  "
+fi
+source $DATA_FILE
+}
+
+#=====================
+
+
 op5_add_new_server_path() {
 help_to_centre 
 print_space_to_centre
@@ -126,29 +150,50 @@ printf "\n"
   create_line_to_size
   tput rc 
   read server_path
- echo $server_path
- #======================================
- #=================================================
- #================================
+ check_if_mc_server
  
-if [ -d "$(eval echo $server_path)" ]; then
-    # Check for required files and folders
-if [ -f "$(eval echo $server_path/server.jar)" ]; then
-        printf "\nThis appears to be a Minecraft server directory."
-    	add_server
-    else
-        printf "\nThis directory does not seem to be a Minecraft server directory."
-    fi
-else
-    printf "\nDirectory not found."
-fi
-
- #===============================
+ if [[ $is_server -eq 1 ]]; then
+ check_if_server_stored
+ if [[ $server_is_stored -eq 0 ]]; then add_server
+ else read -p "Cannot add server. Already stored."
+ fi
+ else read -p "Cannot add path: not a server."
  
-   
+ fi
+ 
+ 
+ display_main_menu
 }
 #######################################################################
 
+check_if_mc_server() {
+if [ -d "$(eval echo $server_path)" ]; then
+    # Check for required files and folders
+    if [ -f "$(eval echo $server_path/server.jar)" ]; then
+        if [ -f "$(eval echo $server_path/eula.txt)" ]; then
+            if [ -d "$(eval echo $server_path/logs)" ]; then
+                printf "\nThis appears to be a Minecraft server directory."
+            	is_server=1
+            else
+                printf "logs directory not found in the specified directory."
+                is_server=0
+            fi
+        else
+            printf "eula.txt file not found in the specified directory."
+            is_server=0
+        fi
+    else
+        printf "server.jar file not found in the specified directory."
+    	is_server=0
+    fi
+else
+    printf "\nDirectory not found."
+	is_server=0
+fi
+
+}
+
+ 
 add_server() {
 
 server_array+=("$server_path")
@@ -167,13 +212,8 @@ server_array+=("$server_path")
   if [ $no_servers_stored == "1" ];  then 
 set_nst_zero
   source $DATA_FILE
-
-display_main_menu
-
 fi
  # ./jar_grabber/target/release/jar_grabber
-  
-
 
 }
 
@@ -187,7 +227,6 @@ help_to_centre
 op5_add_new_server_path
 
 }
-
 
 
 execute_menu_option() {
@@ -222,8 +261,7 @@ execute_menu_option() {
     echo -n "unknown"
     ;;
 esac
-
-read -s -n 1 -p "Okay, option chosen."
+ display_main_menu
  
  }
 
@@ -249,9 +287,6 @@ and add it to this program or press 5 to add an existing Minecraft server.
 
 "
 create_line_to_size
-
-else
-	display_main_menu
 	fi
 	
 	
@@ -260,6 +295,8 @@ else
 	"
 	fi
 	
+display_main_menu
+
 }
 
 

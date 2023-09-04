@@ -1,4 +1,7 @@
-# Configuration file created on Sun 03 Sep 2023 09:28:42 PM EDT
+# Configuration file created on Mon 04 Sep 2023 08:36:07 AM EDT
   no_servers_stored=0
  server_array=()
+ server_array+=("~/Documents/MCS")
+
+
  server_array+=("~/Documents/MCS")

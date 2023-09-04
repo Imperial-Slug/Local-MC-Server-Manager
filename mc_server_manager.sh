@@ -108,16 +108,13 @@ check_if_server_stored() {
 
 # Check if the file exists
 if [ -e "$DATA_FILE" ]; then
-    if grep -qF "$server_path" "$DATA_FILE"; then
-        printf "Server already stored."
+    if grep -qF "server_array+=(\"${server_path}\")" "$DATA_FILE"; then
         server_is_stored=1
     else
-    printf "Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.  "
     server_is_stored=0
     fi
 else
     printf "Error: Couldn't find the data file.  This may be a bug.  "
-    server_is_stored=0
 fi
 source $DATA_FILE
 }
@@ -335,7 +332,7 @@ option_2() {
  read -p "Can't make new server here: a server is already stored at the specified filepath." 
  display_main_menu
  else
- if [[ $server_is_stored == "0" ]]; then create_new_server
+ if [[ $server_is_stored -eq 0 ]]; then create_new_server
  else read -p "Cannot add new server at this location.  Already contains a stored server."
  fi
 

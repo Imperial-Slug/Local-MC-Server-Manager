@@ -117,6 +117,7 @@ if [ -e "$DATA_FILE" ]; then
     fi
 else
     printf "Error: Couldn't find the data file.  This may be a bug.  "
+    server_is_stored=0
 fi
 source $DATA_FILE
 }
@@ -161,10 +162,10 @@ printf "\n"
  
  fi
  
- 
  display_main_menu
+
 }
-#######################################################################
+
 
 check_if_mc_server() {
 if [ -d "$(eval echo $server_path)" ]; then
@@ -172,7 +173,7 @@ if [ -d "$(eval echo $server_path)" ]; then
     if [ -f "$(eval echo $server_path/server.jar)" ]; then
         if [ -f "$(eval echo $server_path/eula.txt)" ]; then
             if [ -d "$(eval echo $server_path/logs)" ]; then
-                printf "\nThis appears to be a Minecraft server directory."
+                printf "This appears to be a Minecraft server directory."
             	is_server=1
             else
                 printf "logs directory not found in the specified directory."
@@ -187,7 +188,7 @@ if [ -d "$(eval echo $server_path)" ]; then
     	is_server=0
     fi
 else
-    printf "\nDirectory not found."
+    printf "Directory not found."
 	is_server=0
 fi
 
@@ -213,7 +214,6 @@ server_array+=("$server_path")
 set_nst_zero
   source $DATA_FILE
 fi
- # ./jar_grabber/target/release/jar_grabber
 
 }
 
@@ -238,7 +238,7 @@ execute_menu_option() {
     ;;
 
   2)
-    echo -n "2"
+    option_2
     ;;
 
   3)
@@ -289,7 +289,6 @@ and add it to this program or press 5 to add an existing Minecraft server.
 create_line_to_size
 	fi
 	
-	
 	else printf " Error checking for configuration file!\n "
 	read -p -n 1 -s "Press any button to exit.
 	"
@@ -320,7 +319,40 @@ fi
 	
 	}
 	
-	
+option_2() {
+
+ read -s -n 1 -p "Install a new Minecraft server? (y/n)  " answer
+ 
+ if [[ $answer != "n" ]] && [[ $answer != "N" ]];
+ then read -p "
+ Enter the filepath you want to install your Minecraft server to:
+ " server_path
+ 
+ check_if_mc_server
+ check_if_server_stored
+ 
+ if [[ $is_server == "1" ]]; then
+ read -p "Can't make new server here: a server is already stored at the specified filepath." 
+ display_main_menu
+ else
+ if [[ $server_is_stored == "0" ]]; then create_new_server
+ else read -p "Cannot add new server at this location.  Already contains a stored server."
+ fi
+
+fi
+else 
+read -p "Aborting server creation.  Press any key to return to the main menu."
+display_main_menu
+
+fi
+}	
+
+create_new_server() {
+
+./jar_grabber/target/release/jar_grabber
+
+
+}
 
    display_main_menu() {
    

@@ -170,22 +170,17 @@ if [ -d "$(eval echo $server_path)" ]; then
     if [ -f "$(eval echo $server_path/server.jar)" ]; then
         if [ -f "$(eval echo $server_path/eula.txt)" ]; then
             if [ -d "$(eval echo $server_path/logs)" ]; then
-                printf "This appears to be a Minecraft server directory."
             	is_server=1
             else
-                printf "logs directory not found in the specified directory."
                 is_server=0
             fi
         else
-            printf "eula.txt file not found in the specified directory."
             is_server=0
         fi
     else
-        printf "server.jar file not found in the specified directory."
     	is_server=0
     fi
 else
-    printf "Directory not found."
 	is_server=0
 fi
 
@@ -322,7 +317,7 @@ option_2() {
  
  if [[ $answer != "n" ]] && [[ $answer != "N" ]];
  then read -p "
- Enter the filepath you want to install your Minecraft server to:
+Enter the filepath you want to install your Minecraft server to:
  " server_path
  
  check_if_mc_server
@@ -342,6 +337,7 @@ read -p "Aborting server creation.  Press any key to return to the main menu."
 display_main_menu
 
 fi
+
 }	
 
 create_new_server() {

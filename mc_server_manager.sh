@@ -6,7 +6,8 @@
 
 DATA_FILE=./conf/data
 is_server=0
-#set -euo pipefail
+set -euo pipefail
+
 main_menu="
 	
 	     ============================================
@@ -30,10 +31,26 @@ main_menu="
 	
 	\n\n"
 
+RED='\033[0;31m'
+RESET='\033[0m'
+BOLD='\033[1m'
 
+check_for_config() {
 
+if [ -f "$DATA_FILE" ]; then
+    source $DATA_FILE
+    
+else create_data_file
+fi
+}
 
+ receive_menu_option() {
+	
+     read -n 1 -s -p "Type the desired option's corresponding number." chosen_option
+	execute_menu_option
 
+	}
+	
 create_line_to_size() {
 
 columns=$(tput cols)
@@ -48,7 +65,7 @@ printf "
 c=1
 }
 
-help_to_centre() {
+get_space_length() {
 # Get the difference in length between the menu item and the current 
 # terminal window, and divide it by 2 so the function can print 
 # the appropriate amount of spaces to centre the item.
@@ -89,14 +106,12 @@ replace="no_servers_stored=0"
 # Check if the file exists
 if [ -e "$DATA_FILE" ]; then
     if grep -qF "$search" "$DATA_FILE"; then
-  
         sed -i "s/$search/$replace/g" "$DATA_FILE"
-        printf "no_servers_stored set to 0.\n"
     else
-    printf "Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.  "
+    printf "\n\n${RED}${BOLD}Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.${RESET}  "
     fi
 else
-    printf "Error: Couldn't find the data file.  This may be a bug.  "
+    printf "\n\n${RED}${BOLD}Error: Couldn't find the data file.  This may be a bug.${RESET}  "
 fi
 source $DATA_FILE
 }
@@ -114,7 +129,7 @@ if [ -e "$DATA_FILE" ]; then
     server_is_stored=0
     fi
 else
-    printf "Error: Couldn't find the data file.  This may be a bug.  "
+    printf "\n\n${RED}${BOLD}Error: Couldn't find the data file.  This may be a bug.${RESET}  "
 fi
 source $DATA_FILE
 }
@@ -123,7 +138,7 @@ source $DATA_FILE
 
 
 op5_add_new_server_path() {
-help_to_centre 
+get_space_length 
 print_space_to_centre
 printf "=======================================
 "
@@ -153,10 +168,11 @@ printf "\n"
  if [[ $is_server -eq 1 ]]; then
  check_if_server_stored
  if [[ $server_is_stored -eq 0 ]]; then add_server
- else read -p "Cannot add server. Already stored."
+ else read -p "\n\n${RED}${BOLD}Cannot add server. Already stored.${RESET}"
  fi
- else read -p "Cannot add path: not a server."
- 
+ else echo -e "\n\n${RED}${BOLD}Cannot add path: not a server.${RESET}"
+read -s -n 1 
+option_5
  fi
  
  display_main_menu
@@ -215,7 +231,7 @@ option_5() {
 
 MENU_LENGTH=39
 clear
-help_to_centre
+get_space_length
 op5_add_new_server_path
 
 }
@@ -249,9 +265,6 @@ execute_menu_option() {
     echo -n "6"
     ;;
   
-  *)
-    echo -n "unknown"
-    ;;
 esac
  display_main_menu
  
@@ -264,12 +277,12 @@ check_for_stored_servers() {
 	if [[ $? -eq 0 ]]
 	then printf '%b\n' "\nConfiguration check complete.  Ready to go.\n"
 	MENU_LENGTH=32
-	help_to_centre
+	get_space_length
 	create_line_to_size
 	if [[ $no_servers_stored -eq 1 ]]
 	then
 	
-	printf "It looks like you don't have any Minecraft servers configured.\n" 
+	printf "${RED}${BOLD}It looks like you don't have any Minecraft servers configured.${RESET}\n" 
 	create_line_to_size
 	
 	read -n 1 -s -r -p "
@@ -281,7 +294,7 @@ and add it to this program or press 5 to add an existing Minecraft server.
 create_line_to_size
 	fi
 	
-	else printf " Error checking for configuration file!\n "
+	else printf " ${RED}${BOLD}Error checking for configuration file!${RESET}\n "
 	read -p -n 1 -s "Press any button to exit.
 	"
 	fi
@@ -290,56 +303,77 @@ display_main_menu
 
 }
 
-
-check_for_config() {
-
-if [ -f "$DATA_FILE" ]; then
-    source $DATA_FILE
-    
-else create_data_file
-fi
-}
-
- receive_menu_option() {
-	
-     read -n 1 -s -p "Type the desired option's corresponding number." chosen_option
-     echo ""
-     echo -e -n "\n$chosen_option chosen.\n"
-
-	execute_menu_option
-
-	
-	}
-	
 option_2() {
+  clear
+  printf %b "\n"
+  MENU_LENGTH=19
+  get_space_length
+  create_line_to_size
+  read -s -n 1 -p "Install a new Minecraft server? (y/n) " answer
 
- read -s -n 1 -p "Install a new Minecraft server? (y/n)  " answer
- 
- if [[ $answer != "n" ]] && [[ $answer != "N" ]];
- then read -p "
-Enter the filepath you want to install your Minecraft server to:
- " server_path
- 
- check_if_mc_server
- check_if_server_stored
- 
- if [[ $is_server == "1" ]]; then
- read -p "Can't make new server here: a server is already stored at the specified filepath." 
- display_main_menu
- else
- if [[ $server_is_stored -eq 0 ]]; then create_new_server
- else read -p "Cannot add new server at this location.  Already contains a stored server."
- fi
+  if [[ $answer != "n" ]] && [[ $answer != "N" ]]; then
+    # This is the opening of the first if statement
 
-fi
-else 
-read -p "Aborting server creation.  Press any key to return to the main menu."
-display_main_menu
+    read -p "Enter the filepath you want to install your Minecraft server to: " server_path
+    check_if_mc_server
+    check_if_server_stored
+    echo $is_server
+    echo $server_is_stored
 
-fi
+    if [ -d "$server_path" ]; then
+      # This is the opening of the second if statement inside the first if statement
 
-}	
+      if [[ $is_server == "0" ]]; then
+        # This is the opening of the third if statement inside the second if statement inside the first if statement
 
+        if ! [[ $server_is_stored == "1" ]]; then
+          # This is the opening of the fourth if statement inside the third if statement inside the second if statement inside the first if statement
+
+          read -p "Can't make a new server here: a server is already stored at the specified filepath."
+          option_2
+
+          
+        else
+          read -p "Cannot add a new server at this location. Already a stored server."
+        fi
+
+        # This is the closing of the fourth if statement inside the third if statement inside the second if statement inside the first if statement
+
+      fi
+
+      # This is the closing of the third if statement inside the second if statement inside the first if statement
+
+    else
+      # This is the opening of the else block inside the second if statement inside the first if statement
+echo -e "\n${RED}${BOLD} This directory doesn't exist yet. Create it and download server.jar? y/n ${RESET} \n"
+  read ans
+  if [[ "$ans" == [nN] ]]; then
+    echo "${RED}${BOLD}Resetting...${RESET}"
+    option_2
+  else 
+eval "mkdir -p \"$server_path\""
+  fi
+     
+      # This is the closing of the else block inside the second if statement inside the first if statement
+
+    fi
+
+    # This is the closing of the second if statement inside the first if statement
+
+  else
+    # This is the opening of the else block for the first if statement
+
+ read -p "Aborting server creation. Press any key to return to the main menu."
+      display_main_menu 
+    # This is the closing of the else block for the first if statement
+
+
+  create_new_server
+
+  fi
+
+  
+}
 create_new_server() {
 
 ./jar_grabber/target/release/jar_grabber

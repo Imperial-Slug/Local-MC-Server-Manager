@@ -1,1 +1,0 @@
-/home/sam/Documents/Projects/Bash\ Projects/Local-MC-Server-Manager/jar_grabber/target/release/jar_grabber: /home/sam/Documents/Projects/Bash\ Projects/Local-MC-Server-Manager/jar_grabber/src/jar_grabber.rs

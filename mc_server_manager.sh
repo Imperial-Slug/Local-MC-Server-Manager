@@ -342,13 +342,14 @@ Server path:  " server_path
         fi
       fi
     else
-      echo "\n${RED}${BOLD}This directory doesn't exist yet. Create it and download server.jar? (y/n) ${RESET}\n"
+      echo -e "\n${RED}${BOLD}This directory doesn't exist yet. Create it and download server.jar? (y/n) ${RESET}\n"
       read ans
       
       if [[ "$ans" == [nN] ]]; then
         echo -e "${RED}${BOLD}Resetting...${RESET}"
         option_2
       else
+        
         server_path_expanded="${server_path/#\~/$HOME}"
         mkdir -p "$server_path_expanded"
         create_new_server
@@ -367,7 +368,7 @@ create_new_server() {
 clear
 
 wget https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar
-echo "\n${RED}${BOLD}Download completed! Run server.jar?${RESET}\n"
+echo -e "\n${RED}${BOLD}Download completed! Run server.jar? (y/n)${RESET}\n"
 
 read run_jar
 
@@ -378,7 +379,7 @@ fi
 
 
 run_server() {
-echo "\n${RED}${BOLD}Starting Minecraft server...${RESET}\n"
+echo -e "\n${RED}${BOLD}Starting Minecraft server...${RESET}\n"
 read -n 1
 }
 

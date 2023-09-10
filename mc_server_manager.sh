@@ -7,16 +7,14 @@
 DATA_FILE=./conf/data
 is_server=0
 set -euo pipefail
-RED='\033[0;31m'
+STYLE='\e[1;33;44m'
+
 RESET='\033[0m'
 BOLD='\033[1m'
 
+
 main_menu="
-	
-	     ============================================
-            |  BASH MINECRAFT SERVER MANAGER: MAIN MENU  |
-	     ============================================
-	
+
 	Welcome to the bash terminal Minecraft server manager.
 	Enter one of the options listed below.
 	
@@ -109,11 +107,11 @@ if [ -e "$DATA_FILE" ]; then
     if grep -qF "$search" "$DATA_FILE"; then
         sed -i "s/$search/$replace/g" "$DATA_FILE"
     else
-    echo -e "\n\n${RED}${BOLD}Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.${RESET}  "
+    echo -e "\n\n${STYLE}${BOLD}Error: Couldn't find the no_servers_stored variable in the data file.  This may be a bug.${RESET}  "
     read -s n 1
     fi
 else
-    echo -e "\n\n${RED}${BOLD}Error: Couldn't find the data file.  This may be a bug.${RESET}  "
+    echo -e "\n\n${STYLE}${BOLD}Error: Couldn't find the data file.  This may be a bug.${RESET}  "
 read -s n 1
 fi
 source $DATA_FILE
@@ -132,7 +130,7 @@ if [ -e "$DATA_FILE" ]; then
     server_is_stored=0
     fi
 else
-    echo -e "\n\n${RED}${BOLD}Error: Couldn't find the data file.  This may be a bug.${RESET}  "
+    echo -e "\n\n${STYLE}${BOLD}Error: Couldn't find the data file.  This may be a bug.${RESET}  "
 read -s n 1
 fi
 source $DATA_FILE
@@ -172,10 +170,10 @@ printf "\n"
  if [[ $is_server -eq 1 ]]; then
  check_if_server_stored
  if [[ $server_is_stored -eq 0 ]]; then add_server
- else echo -e "\n\n${RED}${BOLD}Cannot add server. Already stored.${RESET}"
+ else echo -e "\n\n${STYLE}${BOLD}Cannot add server. Already stored.${RESET}"
  read -s -n 1
  fi
- else echo -e "\n\n${RED}${BOLD}Cannot add path: not a server.${RESET}"
+ else echo -e "\n\n${STYLE}${BOLD}Cannot add path: not a server.${RESET}"
 read -s -n 1 
 option_5
  fi
@@ -287,7 +285,7 @@ check_for_stored_servers() {
 	if [[ $no_servers_stored -eq 1 ]]
 	then
 	
-	echo -e "${RED}${BOLD}It looks like you don't have any Minecraft servers configured.${RESET}\n" 
+	echo -e "${STYLE}${BOLD}It looks like you don't have any Minecraft servers configured.${RESET}\n" 
 	create_line_to_size
 	read -s -n 1
 	
@@ -301,7 +299,7 @@ and add it to this program or press 5 to add an existing Minecraft server.
 create_line_to_size
 	fi
 	
-	else echo -e "${RED}${BOLD}Error checking for configuration file!${RESET}\n "
+	else echo -e "${STYLE}${BOLD}Error checking for configuration file!${RESET}\n "
 	read -p -n 1 -s "Press any button to exit.
 	"
 	fi
@@ -342,11 +340,11 @@ Server path:  " server_path
         fi
       fi
     else
-      echo -e "\n${RED}${BOLD}This directory doesn't exist yet. Create it and download server.jar? (y/n) ${RESET}\n"
+      echo -e "\n${STYLE}${BOLD}This directory doesn't exist yet. Create it and download server.jar? (y/n) ${RESET}\n"
       read ans
       
       if [[ "$ans" == [nN] ]]; then
-        echo -e "${RED}${BOLD}Resetting...${RESET}"
+        echo -e "${STYLE}${BOLD}Resetting...${RESET}"
         option_2
       else
         
@@ -356,7 +354,7 @@ Server path:  " server_path
       fi
     fi
   else
-    echo -e "${RED}${BOLD}Aborting server creation. Press any key to return to the main menu.${RESET}" 
+    echo -e "${STYLE}${BOLD}Aborting server creation. Press any key to return to the main menu.${RESET}" 
   read -s -n 1
   display_main_menu
   fi
@@ -367,8 +365,8 @@ create_new_server() {
 
 clear
 
-wget https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar
-echo -e "\n${RED}${BOLD}Download completed! Run server.jar? (y/n)${RESET}\n"
+wget -q --show-progress https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar 
+echo -e "\n${STYLE}${BOLD}Download completed! Run server.jar? (y/n)${RESET}\n"
 
 read run_jar
 
@@ -379,13 +377,27 @@ fi
 
 
 run_server() {
-echo -e "\n${RED}${BOLD}Starting Minecraft server...${RESET}\n"
+echo -e "\n${STYLE}${BOLD}Starting Minecraft server...${RESET}\n"
 read -n 1
 }
 
    display_main_menu() {
    
-        clear && printf %b "$main_menu"
+        clear
+        MENU_LENGTH=44
+        get_space_length 
+	print_space_to_centre
+printf "============================================
+"
+
+print_space_to_centre
+printf "| BASH MINECRAFT SERVER MANAGER: MAIN MENU |  
+"
+
+print_space_to_centre
+printf "============================================
+"
+printf %b "$main_menu"
 	
 	receive_menu_option
 	

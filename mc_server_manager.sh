@@ -338,7 +338,7 @@ Server path:  " server_path
           read -p "Can't make a new server here: a server is already stored at the specified filepath."
           display_main_menu
         else
-          wget https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar
+	    create_new_server
         fi
       fi
     else
@@ -349,7 +349,9 @@ Server path:  " server_path
         echo -e "${RED}${BOLD}Resetting...${RESET}"
         option_2
       else
-        mkdir -p "$server_path"
+        server_path_expanded="${server_path/#\~/$HOME}"
+        mkdir -p "$server_path_expanded"
+        create_new_server
       fi
     fi
   else
@@ -364,14 +366,14 @@ create_new_server() {
 
 clear
 
-./jar_grabber/target/release/jar_grabber
-
+wget https://piston-data.mojang.com/v1/objects/84194a2f286ef7c14ed7ce0090dba59902951553/server.jar
 echo "\n${RED}${BOLD}Download completed! Run server.jar?${RESET}\n"
 
 read run_jar
 
 if [ $run_jar != [nN] ]; then run_server
 fi
+
 }
 
 

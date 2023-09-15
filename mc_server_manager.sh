@@ -345,6 +345,7 @@ Server path:  " server_path
       
       if [[ "$ans" == [nN] ]]; then
         echo -e "${STYLE}${BOLD}Resetting...${RESET}"
+        
         option_2
       else
         
@@ -370,7 +371,10 @@ echo -e "\n${STYLE}${BOLD}Download completed! Run server.jar? (y/n)${RESET}\n"
 
 read run_jar
 
-if [ $run_jar != [nN] ]; then run_server
+if [[ "$run_jar" != [nN] ]]; then run_server
+else echo "${STYLE}${BOLD} Cancelling server creation.  Press any key to return to the main menu."
+sleep 1
+display_main_menu
 fi
 
 }
@@ -378,7 +382,7 @@ fi
 
 run_server() {
 echo -e "\n${STYLE}${BOLD}Starting Minecraft server...${RESET}\n"
-read -n 1
+sleep 1
 }
 
    display_main_menu() {
